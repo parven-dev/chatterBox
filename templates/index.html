@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SocketIO Flask Example</title>
+    <style>
+        /* Optional: Basic styling for the button */
+        #sendButton {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>SocketIO Flask Example</h1>
+
+    <input id="messageInput" type="text" placeholder="Enter a message">
+    <button id="sendButton">Send Message</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        var socket = io();
+
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+
+        document.getElementById('sendButton').onclick = function() {
+            var message = document.getElementById('messageInput').value;
+            socket.emit('message', message);
+        };
+
+        socket.on('response', function(data) {
+            console.log('Server says:', data);
+        });
+    </script>
+</body>
+</html>
