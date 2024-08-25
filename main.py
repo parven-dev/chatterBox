@@ -1,9 +1,14 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
 socketio = SocketIO(app)
+
+# configure the SQLite database, relative to the app instance folder
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+db = SQLAlchemy(app)
 
 
 @app.route('/')
