@@ -19,5 +19,14 @@ def handle_json(json):
     print('Received JSON: ' + str(json))
     emit('response', 'Server received your JSON: ' + str(json))
 
+
+@app.route("/login")
+def login():
+    return render_template("/login.html")
+
+@app.route("/signup")
+def signup():
+    return render_template("/signup.html")
+
 if __name__ == '__main__':
-    socketio.run(app, debug=True, allow_unsafe_werkzeug=True)
+    socketio.run(app, debug=True, host="192.168.18.16", allow_unsafe_werkzeug=True)
