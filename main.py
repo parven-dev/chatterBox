@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from flask_socketio import SocketIO, emit
 from flask_sqlalchemy import SQLAlchemy
 
@@ -6,9 +6,26 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
 socketio = SocketIO(app)
 
-# configure the SQLite database, relative to the app instance folder
+# configure the SQLite db, relative to the app instance folder
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
 db = SQLAlchemy(app)
+
+from sqlalchemy import Integer, String
+from sqlalchemy.orm import Mapped, mapped_column
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(200))
+    password = db.Column(db.String(200))
+
+    # def __init__(self, email, password):
+    #     self.email = email
+    #     self.password = password
+
+
+with app.app_context():
+    db.create_all()
 
 
 @app.route('/')
@@ -43,6 +60,15 @@ def signup():
         email = request.form["email"]
         password = request.form["pass"]
         print(email, password)
+        user = User(
+            email=email,
+            password=password
+        )
+
+        db.session.add(user)
+        db.session.commit()
+        return "success"
+
     return render_template("/signup.html")
 
 
