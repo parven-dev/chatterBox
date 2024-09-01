@@ -4,11 +4,18 @@ from routes.login import login
 from routes.signup import signup
 from routes.index import index
 from socketio_seteup.socketio_setup import socketio
+from db.database import db
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
 
 # configure the SQLite db, relative to the app instance folder
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
+
 
 socketio.init_app(app)
 
