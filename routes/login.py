@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from db.database import User
+from  routes.index import index
 
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 login = Blueprint("login", __name__, url_prefix="/login")
 
@@ -10,7 +11,13 @@ login_manager = LoginManager()
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User(user_id)
+    return User.query.get(user_id)
+
+
+@index.route("/logout")
+def logout():
+    logout_user()
+    return render_template("index.html")
 
 
 @login.route("/", methods=["GET", "POST"])
